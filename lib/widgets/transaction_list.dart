@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 
-
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
 
@@ -13,8 +12,20 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 600,
-      child: ListView(
-              // HERE IS HOW WE MAP A LIST INTO WIDGETS! :) EASY!
+      child: transactions.isEmpty
+          ? Column(
+              children: [
+                Text(
+                  'No Transactions added yet!',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+                SizedBox(height: 20,),
+                Container(height: 200, child: Image.asset('assets/images/waiting.png', fit: BoxFit.cover,)),
+              ],
+            )
+          :
+          // HERE IS HOW WE MAP A LIST INTO WIDGETS! :) EASY!
+          ListView(
               children: transactions.map((tx) {
                 return Card(
                     child: Row(
