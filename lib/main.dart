@@ -3,6 +3,7 @@ import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import './models/transaction.dart';
+import './widgets/chart.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,11 +39,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _transactions = [
     //Transaction(
-      //  id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
+    //  id: 't1', title: 'New Shoes', amount: 69.99, date: DateTime.now()),
     //Transaction(
-     //   id: 't2', title: 'New TV', amount: 669.99, date: DateTime.now()),
+    //   id: 't2', title: 'New TV', amount: 669.99, date: DateTime.now()),
     //Transaction(id: 't3', title: 'Snacks', amount: 16.53, date: DateTime.now()),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(
+          Duration(days: 7),
+        ),
+      );
+    }).toList();
+  }
 
   void _addNewTransaction(String title, double amount) {
     final newTx = Transaction(
@@ -86,13 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('CHART!'),
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_transactions),
           ],
         ),
