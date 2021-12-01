@@ -1,3 +1,4 @@
+
 import 'package:expense_planner/models/transaction.dart';
 import 'package:flutter/material.dart';
 import '../models/transaction.dart';
@@ -13,22 +14,26 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: transactions.isEmpty
-          ? Column(
-              children: [
-                Text(
-                  'No Transactions added yet!',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    height: 200,
-                    child: Image.asset(
-                      'assets/images/waiting.png',
-                      fit: BoxFit.cover,
-                    )),
-              ],
+          ? LayoutBuilder(
+              builder: (ctx, constraints) {
+                return Column(
+                  children: [
+                    Text(
+                      'No Transactions added yet!',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                        height: constraints.maxHeight * 0.6,
+                        child: Image.asset(
+                          'assets/images/waiting.png',
+                          fit: BoxFit.cover,
+                        )),
+                  ],
+                );
+              },
             )
           :
           // HERE IS HOW WE MAP A LIST INTO WIDGETS! :) EASY!
@@ -51,7 +56,17 @@ class TransactionList extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                     subtitle: Text(DateFormat.yMMMMd().format(tx.date)),
-                    trailing: IconButton(icon: Icon(Icons.delete), onPressed: () => deleteTX(tx.id), color: Theme.of(context).errorColor),
+                    trailing: MediaQuery.of(context).size.width > 540
+                        ? FlatButton.icon(
+                            textColor: Theme.of(context).errorColor,
+                            icon: Icon(Icons.delete),
+                            label: Text('Delete'),
+                            onPressed: () => deleteTX(tx.id),
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () => deleteTX(tx.id),
+                            color: Theme.of(context).errorColor),
                   ),
                 );
               }).toList(),
